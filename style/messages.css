@@ -55,6 +55,7 @@
 /* form create message */
 .form_create-messages{
   position: relative;
+  margin-top: auto;
 }
 
 .form_create-messages-span{
