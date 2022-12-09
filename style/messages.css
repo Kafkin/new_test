@@ -7,7 +7,7 @@
 }
 
 .cmd-body_messages{
-  display: flex; align-items: flex-start; 
+  display: flex; align-items: flex-end; 
   flex-direction: column; gap: 0px;
   width: 100%; height: 370px;
   position: relative;
