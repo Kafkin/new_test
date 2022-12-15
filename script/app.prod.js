@@ -24,7 +24,7 @@ Vue
 
     watch: {
       async messageTextarea( newVal, oldVal ) {
-        if( this.current.user.user_id === this.current.room.id ) {
+        if( this.current.user.user_id === this.current.room.author.id ) {
           if( this.dropFillMessage ) {
 
             clearTimeout( this.timeMessage )
@@ -85,11 +85,8 @@ Vue
             this.messages = data.message
             this.$refs.containerMessages.scrollTop = 99999999999999
           } else {
-            console.log( data.message );
             this.messageTextarea = data.message[ data.message.length - 1 ].text
-            console.log( this.dropFillMessage );
             this.dropFillMessage = true
-            console.log( this.dropFillMessage );
           }
         });
         
@@ -229,7 +226,6 @@ Vue
       },
 
       isActiveWindow( title ) {
-        console.log( title, this.current.windows.includes( title ) );
         return this.current.windows.includes( title )
       },
 
@@ -464,7 +460,6 @@ Vue
 
       this.channelRoom.bind('room-event', ( data ) => {
         this.rooms = data.message
-        console.log( this.rooms );
       });
 
       for( let key in this.steps ) {
