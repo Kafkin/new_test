@@ -417,19 +417,26 @@
     <template v-slot:cmd-body>
       <div class="cmd-body cmd-body_messages">
 
-        <form action="#" class="form form_create-answer form_messages" @submit.prevent="getMessagesRoom" v-if="!messages">
+        <form action="#" class="form form_create-answer form_messages" @submit.prevent="getMessagesRoom" v-if="!activeRoom">
           <v-input v-for="el in inputRoomPassword" :key="el" v-model="formRoomPassword[ el.where ]" :settings="el.settings"></v-input>
           <button class="form-btn" type="submit" :disabled="!isActiveRoomPasswordBtn">select</button>
         </form>
 
-        <div class="container-messages" v-if="messages" ref="containerMessages">
+        <div class="container-messages" ref="containerMessages" v-if="activeRoom && !roomType">
           <p class="message" v-for="el in messages" :key="el" :class="{ 'your': el.author.id === current.user.user_id }"><span class="default-span active">{{ el.author.name }}:</span> {{ el.text }} <span class="default-span active message-span">{{ el.date }}</span></p>
         </div>
 
-        <form action="#" class="form form_post form_create-messages" @submit.prevent="!current.sendStop && createMessage()" v-if="messages">
+        <form action="#" class="form form_post form_create-messages" @submit.prevent="!current.sendStop && createMessage()" v-if="activeRoom && !roomType">
           <span class="form-span form_post-span form_create-messages-span">
             <input type="text" placeholder="enter yout message" class="form-input form_post-input form_create-messages-input" v-model="current.messageText">
             <button class="form-btn form_create-messages-btn" type="submit" :disabled="!isActiveNewMessageBtn">send</button>
+          </span>
+        </form>
+
+        <form action="#" class="form form_post form_create-messages_share" @submit.prevent="!current.sendStop && createMessage()" v-if="activeRoom && roomType">
+          <span class="form-span form_post-span form_create-messages_share-span">
+            <textarea placeholder="enter yout code" class="form-input form_post-input form_create-messages_share-input" v-model="messageTextarea">
+            <!-- <button class="form-btn form_create-messages_share-btn" type="submit" :disabled="!isActiveNewMessageBtn">send</button> -->
           </span>
         </form>
 

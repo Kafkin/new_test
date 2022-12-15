@@ -20,6 +20,11 @@ export default {
     post: null,
     tegs: []
   },
+  
+  timeMessage: null,
+  dropFillMessage: true,
+  messageTextarea: null,
+  activeRoom: false,
 
   error: {
     messages: [],

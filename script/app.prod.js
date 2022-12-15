@@ -22,6 +22,26 @@ Vue
 
     data: () => store,
 
+    watch: {
+      async messageTextarea( newVal, oldVal ) {
+        if( this.dropFillMessage ) {
+
+          clearTimeout( this.timeMessage )
+          this.timeMessage = setTimeout(async () => {
+            this.dropFillMessage = false
+            const res = await helper.post( 'https://serega-test.store/api/messages/update', {
+              refresh_token: localStorage.getItem( 'refresh_token' ),
+              access_token: localStorage.getItem( 'access_token' ),
+              password: this.formRoomPassword.password,
+              room_id: this.current.room.id,
+              text: newVal,
+            });
+          }, 2000)
+
+        }
+      }
+    },
+
     methods: {
 
       async message( messages, code ) {
@@ -58,11 +78,21 @@ Vue
         this.current.loaderRoom = false
         
         this.channelMessage.bind(`message-event${ this.current.room ? this.current.room.id + '' + this.current.room.password : 0 }`, ( data ) => {
-          this.current.loaderRoom = false
-          this.messages = data.message
+          if( this.current.room.type === 'chat' ) {
+            this.current.loaderRoom = false
+            this.messages = data.message
+            this.$refs.containerMessages.scrollTop = 99999999999999
+          } else {
+            console.log( data.message );
+            this.messageTextarea = data.message[ data.message.length - 1 ].text
+            console.log( this.dropFillMessage );
+            this.dropFillMessage = true
+            console.log( this.dropFillMessage );
+          }
         });
         
         this.message( { success: [`Вы подключились к комнате`] }, 201 )
+        this.activeRoom = true
       },
 
       async createMessage() {
@@ -83,8 +113,8 @@ Vue
         }
 
         this.current.sendStop = false
-        this.$refs.containerMessages.scrollTop = 99999999999999
         this.current.messageText = null
+        this.$refs.containerMessages.scrollTop = 99999999999999
       },
 
       async updateLike() {
@@ -312,6 +342,10 @@ Vue
       
       isActiveRegBtn() {
         return this.formReg.name && this.formReg.email && this.formReg.password && this.formReg.dbPassword 
+      },
+
+      roomType() {
+        return this.current.room && this.current.room.type === 'share'
       },
 
       isActiveLogBtn() {
