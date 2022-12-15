@@ -481,7 +481,7 @@
 
         <form action="#" class="form form_post form_create-messages_share" @submit.prevent="!current.sendStop && createMessage()" v-if="activeRoom && roomType">
           <span class="form-span form_post-span form_create-messages_share-span">
-            <textarea placeholder="enter yout code" class="form-input form_post-input form_create-messages_share-input" v-model="messageTextarea" />
+            <textarea placeholder="enter yout code" class="form-input form_post-input form_create-messages_share-input" :disabled="current.user.user_id !== current.room.author.id" v-model="messageTextarea"></textarea>
           </span>
         </form>
 

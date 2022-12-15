@@ -26,10 +26,10 @@ Vue
       async messageTextarea( newVal, oldVal ) {
         if( this.current.user.user_id === this.current.room.author.id ) {
           if( this.dropFillMessage ) {
-
             clearTimeout( this.timeMessage )
+            this.dropFillMessage = false
+
             this.timeMessage = setTimeout(async () => {
-              this.dropFillMessage = false
               const res = await helper.post( 'https://serega-test.store/api/messages/update', {
                 refresh_token: localStorage.getItem( 'refresh_token' ),
                 access_token: localStorage.getItem( 'access_token' ),
@@ -37,8 +37,9 @@ Vue
                 room_id: this.current.room.id,
                 text: newVal,
               });
-            }, 2000)
+            }, 100)
 
+            this.dropFillMessage = true
           }
         }
       }
@@ -84,14 +85,30 @@ Vue
             this.current.loaderRoom = false
             this.messages = data.message
             this.$refs.containerMessages.scrollTop = 99999999999999
-          } else {
+          } else if( this.current.user.user_id !== this.current.room.author.id ) {
+            console.log( 'get' );
             this.messageTextarea = data.message[ data.message.length - 1 ].text
-            this.dropFillMessage = true
           }
         });
         
         this.message( { success: [`Вы подключились к комнате`] }, 201 )
         this.activeRoom = true
+
+        if( this.current.room.type === 'share' ) {
+          const res_two = await helper.post( 'https://serega-test.store/api/messages/show', {
+            refresh_token: localStorage.getItem( 'refresh_token' ),
+            access_token: localStorage.getItem( 'access_token' ),
+            password: this.formRoomPassword.password,
+            room_id: this.current.room.id,
+          });
+          
+          if( res_two && res_two.error ) {
+            this.message( res_two.error.message, res_two.error.code )
+            return
+          }
+          
+          this.messageTextarea = res_two[0].text
+        }
       },
 
       async createMessage() {
