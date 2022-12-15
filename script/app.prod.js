@@ -227,6 +227,7 @@ Vue
       },
 
       isActiveWindow( title ) {
+        console.log( title, this.current.windows.includes( title ) );
         return this.current.windows.includes( title )
       },
 

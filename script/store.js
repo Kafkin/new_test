@@ -4,7 +4,7 @@ export default {
     user: null,
     activeWindow: null,
     windows: [
-      'navigation', 
+      'navigation'
     ],
     component: null, 
     loaderPost: false,

@@ -77,6 +77,7 @@
     
     <template v-slot:cmd-body>
       <div class="cmd-body cmd-body_nav">
+        {{ current.windows }}
         <span class="cmd-body_nav__item" v-for="el in filterNavigation" :key="el" :class="{ 'active': isActiveWindow( el.title ) }" @click.prevent="el.title === 'exit' ? exit() : !isActiveWindow( el.title ) && current.windows.push( el.title ), current.activeWindow = el.title">
           <img class="cmd-body_nav__item-img" v-if="!isActiveWindow( el.title )" :src="`./assets/icon/${ el.white_img }.png`" alt="folder">
           <img class="cmd-body_nav__item-img" v-if="isActiveWindow( el.title )" :src="`./assets/icon/${ el.black_img }.png`" alt="folder">
@@ -401,50 +402,7 @@
     </template>
   </v-cmd>
 
-
-
-  <v-cmd 
-    v-model:active="current.activeWindow" 
-    v-if="isActiveWindow( 'messages' )"
-    :settings="{ name: 'messages', index: 100 }"
-    v-model="current.windows" 
-    class="cmd__messages"
-  >
-    <template v-slot:cmd-header>
-      <div class="cmd-title cmd-title_messages">messages</div>
-    </template>
-    
-    <template v-slot:cmd-body>
-      <div class="cmd-body cmd-body_messages">
-
-        <form action="#" class="form form_create-answer form_messages" @submit.prevent="getMessagesRoom" v-if="!activeRoom">
-          <v-input v-for="el in inputRoomPassword" :key="el" v-model="formRoomPassword[ el.where ]" :settings="el.settings"></v-input>
-          <button class="form-btn" type="submit" :disabled="!isActiveRoomPasswordBtn">select</button>
-        </form>
-
-        <div class="container-messages" ref="containerMessages" v-if="activeRoom && !roomType">
-          <p class="message" v-for="el in messages" :key="el" :class="{ 'your': el.author.id === current.user.user_id }"><span class="default-span active">{{ el.author.name }}:</span> {{ el.text }} <span class="default-span active message-span">{{ el.date }}</span></p>
-        </div>
-
-        <form action="#" class="form form_post form_create-messages" @submit.prevent="!current.sendStop && createMessage()" v-if="activeRoom && !roomType">
-          <span class="form-span form_post-span form_create-messages-span">
-            <input type="text" placeholder="enter yout message" class="form-input form_post-input form_create-messages-input" v-model="current.messageText">
-            <button class="form-btn form_create-messages-btn" type="submit" :disabled="!isActiveNewMessageBtn">send</button>
-          </span>
-        </form>
-
-        <form action="#" class="form form_post form_create-messages_share" @submit.prevent="!current.sendStop && createMessage()" v-if="activeRoom && roomType">
-          <span class="form-span form_post-span form_create-messages_share-span">
-            <textarea placeholder="enter yout code" class="form-input form_post-input form_create-messages_share-input" v-model="messageTextarea">
-            <!-- <button class="form-btn form_create-messages_share-btn" type="submit" :disabled="!isActiveNewMessageBtn">send</button> -->
-          </span>
-        </form>
-
-      </div>
-    </template>
-  </v-cmd>
-
-
+  
 
   <v-cmd 
     v-model:active="current.activeWindow" 
@@ -486,6 +444,48 @@
           <v-input v-for="el in inputReg" :key="el" v-model="formReg[ el.where ]" :settings="el.settings"></v-input>
           <button class="form-btn" type="submit" :disabled="!isActiveRegBtn">registration</button>
         </form>
+      </div>
+    </template>
+  </v-cmd>
+
+
+
+  <v-cmd 
+    v-model:active="current.activeWindow" 
+    v-if="isActiveWindow( 'messages' )"
+    :settings="{ name: 'messages', index: 100 }"
+    v-model="current.windows" 
+    class="cmd__messages"
+  >
+    <template v-slot:cmd-header>
+      <div class="cmd-title cmd-title_messages">messages</div>
+    </template>
+    
+    <template v-slot:cmd-body>
+      <div class="cmd-body cmd-body_messages">
+
+        <form action="#" class="form form_create-answer form_messages" @submit.prevent="getMessagesRoom" v-if="!activeRoom">
+          <v-input v-for="el in inputRoomPassword" :key="el" v-model="formRoomPassword[ el.where ]" :settings="el.settings"></v-input>
+          <button class="form-btn" type="submit" :disabled="!isActiveRoomPasswordBtn">select</button>
+        </form>
+
+        <div class="container-messages" ref="containerMessages" v-if="activeRoom && !roomType">
+          <p class="message" v-for="el in messages" :key="el" :class="{ 'your': el.author.id === current.user.user_id }"><span class="default-span active">{{ el.author.name }}:</span> {{ el.text }} <span class="default-span active message-span">{{ el.date }}</span></p>
+        </div>
+
+        <form action="#" class="form form_post form_create-messages" @submit.prevent="!current.sendStop && createMessage()" v-if="activeRoom && !roomType">
+          <span class="form-span form_post-span form_create-messages-span">
+            <input type="text" placeholder="enter yout message" class="form-input form_post-input form_create-messages-input" v-model="current.messageText">
+            <button class="form-btn form_create-messages-btn" type="submit" :disabled="!isActiveNewMessageBtn">send</button>
+          </span>
+        </form>
+
+        <form action="#" class="form form_post form_create-messages_share" @submit.prevent="!current.sendStop && createMessage()" v-if="activeRoom && roomType">
+          <span class="form-span form_post-span form_create-messages_share-span">
+            <textarea placeholder="enter yout code" class="form-input form_post-input form_create-messages_share-input" v-model="messageTextarea" />
+          </span>
+        </form>
+
       </div>
     </template>
   </v-cmd>
