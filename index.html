@@ -77,7 +77,6 @@
     
     <template v-slot:cmd-body>
       <div class="cmd-body cmd-body_nav">
-        {{ current.windows }}
         <span class="cmd-body_nav__item" v-for="el in filterNavigation" :key="el" :class="{ 'active': isActiveWindow( el.title ) }" @click.prevent="el.title === 'exit' ? exit() : !isActiveWindow( el.title ) && current.windows.push( el.title ), current.activeWindow = el.title">
           <img class="cmd-body_nav__item-img" v-if="!isActiveWindow( el.title )" :src="`./assets/icon/${ el.white_img }.png`" alt="folder">
           <img class="cmd-body_nav__item-img" v-if="isActiveWindow( el.title )" :src="`./assets/icon/${ el.black_img }.png`" alt="folder">

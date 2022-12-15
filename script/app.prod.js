@@ -24,20 +24,22 @@ Vue
 
     watch: {
       async messageTextarea( newVal, oldVal ) {
-        if( this.dropFillMessage ) {
+        if( this.current.user.user_id === this.current.room.id ) {
+          if( this.dropFillMessage ) {
 
-          clearTimeout( this.timeMessage )
-          this.timeMessage = setTimeout(async () => {
-            this.dropFillMessage = false
-            const res = await helper.post( 'https://serega-test.store/api/messages/update', {
-              refresh_token: localStorage.getItem( 'refresh_token' ),
-              access_token: localStorage.getItem( 'access_token' ),
-              password: this.formRoomPassword.password,
-              room_id: this.current.room.id,
-              text: newVal,
-            });
-          }, 2000)
+            clearTimeout( this.timeMessage )
+            this.timeMessage = setTimeout(async () => {
+              this.dropFillMessage = false
+              const res = await helper.post( 'https://serega-test.store/api/messages/update', {
+                refresh_token: localStorage.getItem( 'refresh_token' ),
+                access_token: localStorage.getItem( 'access_token' ),
+                password: this.formRoomPassword.password,
+                room_id: this.current.room.id,
+                text: newVal,
+              });
+            }, 2000)
 
+          }
         }
       }
     },
