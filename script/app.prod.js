@@ -222,7 +222,9 @@ Vue
       exit() {
         this.current.windows = [ 'navigation' ]
         this.current.user = null
-        localStorage.clear()
+
+        localStorage.removeItem( 'refresh_token' )
+        localStorage.removeItem( 'access_token' )
       },
 
       isActiveTegs( el ) {

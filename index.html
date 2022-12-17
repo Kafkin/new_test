@@ -386,8 +386,9 @@
             :class="{ 'active': current.room && current.room.id === el.id && isActiveWindow( 'messages' ) }" 
             @click="
               messages = null,
-              formRoomPassword.password = null,
+              activeRoom = false,
               current.room = null,
+              formRoomPassword.password = null,
               !isActiveWindow( 'messages' ) && current.windows.push( 'messages' ),
               current.activeWindow = 'messages',
               current.room = el"
